@@ -1,10 +1,7 @@
-package MazeOfThreads;
+package domain;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javafx.stage.Stage;
@@ -46,7 +43,7 @@ public class Chronometer extends JFrame implements Runnable{
     }
 
     public void run(){
-        Integer minute = 0 , second = 0, milesimas = 0;
+        Integer minute = 0 , second = 0, millesimas = 0;
         //min es minutos, seg es segundos y mil es milesimas de segundo
         String min="", seg="", mil="";
         try
@@ -57,13 +54,13 @@ public class Chronometer extends JFrame implements Runnable{
             {
                 Thread.sleep( 4 );
                 //Incrementamos 4 milesimas de segundo
-                milesimas += 4;
+                millesimas += 4;
 
                 //Cuando llega a 1000 osea 1 segundo aumenta 1 segundo
                 //y las milesimas de segundo de nuevo a 0
-                if( milesimas == 1000 )
+                if( millesimas == 1000 )
                 {
-                    milesimas = 0;
+                    millesimas = 0;
                     second += 1;
                     //Si los segundos llegan a 60 entonces aumenta 1 los minutos
                     //y los segundos vuelven a 0
@@ -81,9 +78,9 @@ public class Chronometer extends JFrame implements Runnable{
                 if( second < 10 ) seg = "0" + second;
                 else seg = second.toString();
 
-                if( milesimas < 10 ) mil = "00" + milesimas;
-                else if( milesimas < 100 ) mil = "0" + milesimas;
-                else mil = milesimas.toString();
+                if( millesimas < 10 ) mil = "00" + millesimas;
+                else if( millesimas < 100 ) mil = "0" + millesimas;
+                else mil = millesimas.toString();
 
                 //Colocamos en la etiqueta la informacion
                 time.setText( min + ":" + seg + ":" + mil );
@@ -95,25 +92,7 @@ public class Chronometer extends JFrame implements Runnable{
         time.setText( "00:00:000" );
     }
 
-//    public void actionPerformed( ActionEvent evt) {
-//        Object o = evt.getSource();
-//        if( o instanceof JButton )
-//        {
-//            JButton btn = (JButton)o;
-//            if( btn.getText().equals("Reinit") ){
-//                if(onoff == 0){
-//                   onoff = 1;
-//                   initChrono();
-//                }
-//            }
-//            if( btn.getText().equals("Stop") ) {
-//                if (onoff == 1){
-//                   onoff = 0;
-//                   stopChrono();
-//                }
-//            }
-//        }
-//    }
+
 
     //Iniciar el cronometro poniendo cronometroActivo 
     //en verdadero para que entre en el while

@@ -1,10 +1,10 @@
 package MazeOfThreads;
 
-import domain.Block;
-import domain.CharacterSmart;
-import domain.CharacterFast;
-import domain.CharacterFurious;
-import domain.Player;
+import domain.Chronometer;
+import domain.Brick;
+import domain.SmartCharacter;
+import domain.FastCharacter;
+import domain.FuriousCharacter;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,25 +50,25 @@ public class MazeOfThreads extends Application implements Runnable {
     private final int WIDTHM = 1200;
     private final int HEIGHTM = 650;
     private int pixelSize = 70;
-    private Block maze[][];
+    private Brick maze[][];
     private BufferedImage image;
     private Canvas canvas, canvas2;
     private Pane pane;
     private GraphicsContext graphicsContext, gc2;
     private boolean val = false;
     private Thread play;
-    private CharacterFast player;
-    private CharacterFurious playerFurious;
-    private CharacterSmart playerSmart;
-    private CharacterFast[] fastList = new CharacterFast[0];
-    private CharacterFurious[] furiousList = new CharacterFurious[0];
-    private CharacterSmart[] smarList = new CharacterSmart[0];
+    private FastCharacter player;
+    private FuriousCharacter playerFurious;
+    private SmartCharacter playerSmart;
+    private FastCharacter[] fastList = new FastCharacter[0];
+    private FuriousCharacter[] furiousList = new FuriousCharacter[0];
+    private SmartCharacter[] smarList = new SmartCharacter[0];
     private TextArea area;
     Chronometer chronometer = new Chronometer();
-    private CharacterFast[] fastList2 = new CharacterFast[0];
-    private CharacterFurious[] furiousList2 = new CharacterFurious[0];
-    private CharacterSmart[] smarList2 = new CharacterSmart[0];
-    private Player plerList[] = new Player[2];
+    private FastCharacter[] fastList2 = new FastCharacter[0];
+    private FuriousCharacter[] furiousList2 = new FuriousCharacter[0];
+    private SmartCharacter[] smarList2 = new SmartCharacter[0];
+   // private Player plerList[] = new Player[2];
     private int aux;
     private String tipoMatriz;
     int[][] matrizEasy = {{1, 1, 0, 0, 0, 0, 0, 0, 0},
@@ -125,12 +125,12 @@ public class MazeOfThreads extends Application implements Runnable {
     public MazeOfThreads() {
 
 //        getDificult(2);
-        this.maze = new Block[15][9];
+        this.maze = new Brick[15][9];
     }
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("MAZE RUNNER");
+        primaryStage.setTitle("Maze of Threads");
         init(primaryStage);
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -208,13 +208,13 @@ public class MazeOfThreads extends Application implements Runnable {
                 amount = Integer.parseInt(texfieldAmount.getText());
 
                 if (cbx.getValue().equalsIgnoreCase("Fast")) {
-                    fastList2 = new CharacterFast[amount];
+                    fastList2 = new FastCharacter[amount];
 
                 } else if (cbx.getValue().equalsIgnoreCase("Smart")) {
-                    smarList2 = new CharacterSmart[amount];
+                    smarList2 = new SmartCharacter[amount];
 
                 } else if (cbx.getValue().equalsIgnoreCase("Furious")) {
-                    furiousList2 = new CharacterFurious[amount];
+                    furiousList2 = new FuriousCharacter[amount];
 
                 }
                 texfieldAmount.setText("");
@@ -226,7 +226,9 @@ public class MazeOfThreads extends Application implements Runnable {
 //        ObservableList<Chronometer> data = FXCollections.observableArrayList(
 //                new Chronometer(chrono.getTime(), chrono.getTime()));
         area = new TextArea();
-        area.relocate(1200, 500);
+        //area.setMaxSize(200,200);
+        area.relocate(1053, 500);
+        area.setEditable(false);
 
 //        table.setEditable(true);
 //        table.setMaxSize(160, 160);
@@ -251,9 +253,9 @@ public class MazeOfThreads extends Application implements Runnable {
                     if (smarList.length != 0) {
 
                         for (int i = 0; i < smarList.length; i++) {
-                            smarList[i] = new CharacterSmart(getPixelSize(), initPlayer());
+                            smarList[i] = new SmartCharacter(getPixelSize(), initPlayer());
 
-                            smarList[i].setNombre(nombre);
+                            smarList[i].setPlayerName(nombre);
                             smarList[i].start();
 //                                     smarList[i].sleep(1000);
 //                            smarList[i].sleep(1000);
@@ -262,8 +264,8 @@ public class MazeOfThreads extends Application implements Runnable {
                     }
                     if (furiousList.length != 0) {
                         for (int i = 0; i < furiousList.length; i++) {
-                            furiousList[i] = new CharacterFurious(getPixelSize(), initPlayer());
-                            furiousList[i].setNombre(nombre);
+                            furiousList[i] = new FuriousCharacter(getPixelSize(), initPlayer());
+                            furiousList[i].setPlayerName(nombre);
                             furiousList[i].start();
                             val = true;
                         }
@@ -271,8 +273,8 @@ public class MazeOfThreads extends Application implements Runnable {
                     if (fastList.length != 0) {
                         for (int i = 0; i < fastList.length; i++) {
 
-                            fastList[i] = new CharacterFast(getPixelSize(), initPlayer());
-                            fastList[i].setNombre(nombre);
+                            fastList[i] = new FastCharacter(getPixelSize(), initPlayer());
+                            fastList[i].setPlayerName(nombre);
 //                                        if(verificaColicion(fastList[i],i)==false){     
                             fastList[i].start();
                             val = true;
@@ -284,8 +286,8 @@ public class MazeOfThreads extends Application implements Runnable {
                     if (smarList2.length != 0) {
 
                         for (int i = 0; i < smarList2.length; i++) {
-                            smarList2[i] = new CharacterSmart(getPixelSize(), initPlayer());
-                            smarList2[i].setNombre(nombre2);
+                            smarList2[i] = new SmartCharacter(getPixelSize(), initPlayer());
+                            smarList2[i].setPlayerName(nombre2);
                             smarList2[i].start();
 //                smarList2[i].n;
                             val = true;
@@ -293,8 +295,8 @@ public class MazeOfThreads extends Application implements Runnable {
                     }
                     if (furiousList2.length != 0) {
                         for (int i = 0; i < furiousList2.length; i++) {
-                            furiousList2[i] = new CharacterFurious(getPixelSize(), initPlayer());
-                            furiousList2[i].setNombre(nombre2);
+                            furiousList2[i] = new FuriousCharacter(getPixelSize(), initPlayer());
+                            furiousList2[i].setPlayerName(nombre2);
                             furiousList2[i].start();
                             val = true;
                         }
@@ -302,9 +304,9 @@ public class MazeOfThreads extends Application implements Runnable {
                     if (fastList2.length != 0) {
                         for (int i = 0; i < fastList2.length; i++) {
 
-                            fastList2[i] = new CharacterFast(getPixelSize(), initPlayer());
+                            fastList2[i] = new FastCharacter(getPixelSize(), initPlayer());
 //                                        if(verificaColicion(fastList[i],i)==false){    
-                            fastList2[i].setNombre(nombre2);
+                            fastList2[i].setPlayerName(nombre2);
                             fastList2[i].start();
                             val = true;
 
@@ -360,12 +362,12 @@ public class MazeOfThreads extends Application implements Runnable {
                 amount = Integer.parseInt(texfieldAmount.getText());
 
                 if (cbx.getValue().equalsIgnoreCase("Fast")) {
-                    fastList = new CharacterFast[amount];
+                    fastList = new FastCharacter[amount];
                 } else if (cbx.getValue().equalsIgnoreCase("Smart")) {
-                    smarList = new CharacterSmart[amount];
+                    smarList = new SmartCharacter[amount];
 
                 } else if (cbx.getValue().equalsIgnoreCase("Furious")) {
-                    furiousList = new CharacterFurious[amount];
+                    furiousList = new FuriousCharacter[amount];
 
                 }
                 texfieldAmount.setText("");
@@ -381,7 +383,7 @@ public class MazeOfThreads extends Application implements Runnable {
                 if (cont == 0) {
 //                    for(int i=0;i<smarList.length;i++){
 //                    
-//                        smarList[i].parar();
+//                        smarList[i].stopCrash();
                     val = false;
 //                        smarList[i].parar2();
                     //   cont=1;
@@ -396,7 +398,7 @@ public class MazeOfThreads extends Application implements Runnable {
                 try {
                     //                   for(int i=0;i<smarList.length;i++){
 //
-//                 smarList[i].seguir();
+//                 smarList[i].keepCrash();
 //                    val=true;
 //                
 ////               smarList[i].seguir2();
@@ -501,7 +503,7 @@ public class MazeOfThreads extends Application implements Runnable {
                 gc.setFill(Color.FUCHSIA);
 
                 gc.drawImage(smarList[i].getImage(), smarList[i].getX(), smarList[i].getY(), 30, 30);
-                gc.strokeText(smarList[i].getNombre(), smarList[i].getX(), smarList[i].getY());
+                gc.strokeText(smarList[i].getPlayerName(), smarList[i].getX(), smarList[i].getY());
                 // gc.fillOval(smarList[i].getX(), smarList[i].getY(), 10, 10);
             }
         }
@@ -512,7 +514,7 @@ public class MazeOfThreads extends Application implements Runnable {
                 gc.setFill(Color.FUCHSIA);
 
                 gc.drawImage(furiousList[i].getImage(), furiousList[i].getX(), furiousList[i].getY(), 30, 30);
-                gc.strokeText(furiousList[i].getNombre(), furiousList[i].getX(), furiousList[i].getY());
+                gc.strokeText(furiousList[i].getPlayerName(), furiousList[i].getX(), furiousList[i].getY());
                 // gc.fillOval(furiousList[i].getX(), furiousList[i].getY(), 10, 10);
             }
         }
@@ -523,7 +525,7 @@ public class MazeOfThreads extends Application implements Runnable {
                 gc.setFill(Color.FUCHSIA);
 
                 gc.drawImage(fastList[i].getImage(), fastList[i].getX(), fastList[i].getY(), 30, 30);
-                gc.strokeText(fastList[i].getNombre(), fastList[i].getX(), fastList[i].getY());
+                gc.strokeText(fastList[i].getPlayerName(), fastList[i].getX(), fastList[i].getY());
 //                gc.fillOval(fastList[i].getX(), fastList[i].getY(), 10, 10);
 
             }
@@ -534,9 +536,10 @@ public class MazeOfThreads extends Application implements Runnable {
         for (int i = 0; i < smarList2.length; i++) {
             metaSmartt(smarList2[i]);
             if (smarList2[i].isCrash2() == true) {
-
+               // gc.setStroke(Color.DEEPPINK);
                 gc.drawImage(smarList2[i].getImage(), smarList2[i].getX(), smarList2[i].getY(), 30, 30);
-                gc.strokeText(smarList2[i].getNombre(), smarList2[i].getX(), smarList2[i].getY());
+                
+                gc.strokeText(smarList2[i].getPlayerName(), smarList2[i].getX(), smarList2[i].getY());
             }
 
         }
@@ -545,7 +548,7 @@ public class MazeOfThreads extends Application implements Runnable {
             saberFruta(furiousList2[i]);
             if (furiousList2[i].isCrash2() == true) {
                 gc.drawImage(furiousList2[i].getImage(), furiousList2[i].getX(), furiousList2[i].getY(), 30, 30);
-                gc.strokeText(furiousList2[i].getNombre(), furiousList2[i].getX(), furiousList2[i].getY());
+                gc.strokeText(furiousList2[i].getPlayerName(), furiousList2[i].getX(), furiousList2[i].getY());
             }
 
         }
@@ -554,13 +557,13 @@ public class MazeOfThreads extends Application implements Runnable {
             metaFast(fastList2[i]);
             if (fastList2[i].isCrash2() == true) {
                 gc.drawImage(fastList2[i].getImage(), fastList2[i].getX(), fastList2[i].getY(), 30, 30);
-                gc.strokeText(fastList2[i].getNombre(), fastList2[i].getX(), fastList2[i].getY());
+                gc.strokeText(fastList2[i].getPlayerName(), fastList2[i].getX(), fastList2[i].getY());
             }
 
         }
     }
 
-    public boolean verificaColicion(CharacterFast character, int num) {
+    public boolean verificaColicion(FastCharacter character, int num) {
         for (int i = 0; i < fastList.length; i++) {
             if (num != i || num != 0) {
                 if (character.getX() == fastList[i].getX() && character.getY() == fastList[i].getY()) {
@@ -573,16 +576,16 @@ public class MazeOfThreads extends Application implements Runnable {
         return false;
     }
 
-    public void metaFast(CharacterFast fast) {
+    public void metaFast(FastCharacter fast) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < this.maze[0].length; j++) {
-                if (fast.getCurrentBlock().getX() == maze[i][j].getX() && fast.getCurrentBlock().getY() == maze[i][j].getY()) {
-                    if (fast.getCurrentBlock().getType() == "start") {
+                if (fast.getCurrentBrick().getX() == maze[i][j].getX() && fast.getCurrentBrick().getY() == maze[i][j].getY()) {
+                    if (fast.getCurrentBrick().getBrickType() == "start") {
                         if (fast.isCrash2() == true) {
-                            area.setText(area.getText() + "\n" + fast.getNombre() + chronometer.getTimeObtained());
+                            area.setText(area.getText()+"\n" +"Player: " + fast.getPlayerName()+" Thread name: "+fast.getName() +" Time: "+ chronometer.getTimeObtained());
                         }
-                        fast.parar();
-//                        area.setText(area.getText() + "\n" + fast.getNombre());
+                        fast.stopCrash();
+//                        area.setText(area.getText() + "\n" + fast.getPlayerName());
 //                           fast.setCrash2(false);
                     }
                 }
@@ -591,16 +594,16 @@ public class MazeOfThreads extends Application implements Runnable {
         }
     }
 
-    public void metaSmartt(CharacterSmart smart) {
+    public void metaSmartt(SmartCharacter smart) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < this.maze[0].length; j++) {
-                if (smart.getCurrentBlock().getX() == maze[i][j].getX() && smart.getCurrentBlock().getY() == maze[i][j].getY()) {
-                    if (smart.getCurrentBlock().getType() == "start") {
+                if (smart.getCurrentBrick().getX() == maze[i][j].getX() && smart.getCurrentBrick().getY() == maze[i][j].getY()) {
+                    if (smart.getCurrentBrick().getBrickType() == "start") {
 //                        val = false;
                         if (smart.isCrash2() == true) {
-                            area.setText(area.getText() + "\n" + smart.getNombre() + chronometer.getTimeObtained());
+                            area.setText(area.getText()+"\n" +"Player: " + smart.getPlayerName()+" Thread name: "+smart.getName() +" Time: "+ chronometer.getTimeObtained());
                         }
-                        smart.parar();
+                        smart.stopCrash();
 
 //                        smart.setCrash2(false);
                     }
@@ -610,17 +613,17 @@ public class MazeOfThreads extends Application implements Runnable {
         }
     }
 
-    public void metaFurious(CharacterFurious furious) {
+    public void metaFurious(FuriousCharacter furious) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < this.maze[0].length; j++) {
-                if (furious.getCurrentBlock().getX() == maze[i][j].getX() && furious.getCurrentBlock().getY() == maze[i][j].getY()) {
-                    if (furious.getCurrentBlock().getType() == "start") {
+                if (furious.getCurrentBrick().getX() == maze[i][j].getX() && furious.getCurrentBrick().getY() == maze[i][j].getY()) {
+                    if (furious.getCurrentBrick().getBrickType() == "start") {
 //                        furious.setCrash2(false);
                         if (furious.isCrash2() == true) {
-                            area.setText(area.getText() + "\n" + furious.getNombre() + chronometer.getTimeObtained());
+                            area.setText(area.getText()+"\n" +"Player: " + furious.getPlayerName()+" Thread name: "+furious.getName() +" Time: "+ chronometer.getTimeObtained());
                         }
-                        furious.parar();
-//                        area.setText(area.getText() + "\n" + furious.getNombre());
+                        furious.stopCrash();
+//                        area.setText(area.getText() + "\n" + furious.getPlayerName());
                     }
                 }
 
@@ -628,12 +631,12 @@ public class MazeOfThreads extends Application implements Runnable {
         }
     }
 
-    public void saberFruta(CharacterFurious furious) throws FileNotFoundException {
+    public void saberFruta(FuriousCharacter furious) throws FileNotFoundException {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < this.maze[0].length; j++) {
-                if (furious.getCurrentBlock().getX() == maze[i][j].getX() && furious.getCurrentBlock().getY() == maze[i][j].getY()) {
-                    if (maze[i][j].getType() == "fruta") {
-                        maze[i][j].setType("floor");
+                if (furious.getCurrentBrick().getX() == maze[i][j].getX() && furious.getCurrentBrick().getY() == maze[i][j].getY()) {
+                    if (maze[i][j].getBrickType() == "fruta") {
+                        maze[i][j].setBrickType("floor");
 //                        drawCuadro(gc2, pixelSize, maze[i][j].getX(), maze[i][j].getY());
                         graphicsContext.setFill(Color.DARKORANGE);
                         // gc2.fillRect(i * pixelSize, j* pixelSize, pixelSize, pixelSize);
@@ -646,7 +649,7 @@ public class MazeOfThreads extends Application implements Runnable {
         }
     }
 
-    public Block initPlayer() {
+    public Brick initPlayer() {
         if (tipoMatriz == "easy") {
             return this.maze[0][0];
         } else if (tipoMatriz == "medium") {
@@ -656,7 +659,7 @@ public class MazeOfThreads extends Application implements Runnable {
         return devolver();
     }
 
-    public Block devolver() {
+    public Brick devolver() {
         int direction = (int) (Math.random() * (3 - 1) + 1);
         if (direction == 1) {
             return this.maze[0][6];
@@ -670,12 +673,12 @@ public class MazeOfThreads extends Application implements Runnable {
         int y2;
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < this.maze[0].length; j++) {
-                if (this.maze[i][j].pressMouse(x, y)) {
-                    if (this.maze[i][j].getType().equals("wall")) {
-                        this.maze[i][j].setType("fruta");
+                if (this.maze[i][j].getMouseValue(x, y)) {
+                    if (this.maze[i][j].getBrickType().equals("wall")) {
+                        this.maze[i][j].setBrickType("fruta");
                         drawCuadro(gc, pixelSize, i, j);
-                    } else if (this.maze[i][j].getType().equals("floor")) {
-                        this.maze[i][j].setType("fruta");
+                    } else if (this.maze[i][j].getBrickType().equals("floor")) {
+                        this.maze[i][j].setBrickType("fruta");
                         drawCuadro(gc, pixelSize, i, j);
                     }
 
@@ -692,12 +695,12 @@ public class MazeOfThreads extends Application implements Runnable {
         int y2;
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < this.maze[0].length; j++) {
-                if (this.maze[i][j].pressMouse(x, y)) {
-                    if (this.maze[i][j].getType().equals("wall")) {
-                        this.maze[i][j].setType("floor");
+                if (this.maze[i][j].getMouseValue(x, y)) {
+                    if (this.maze[i][j].getBrickType().equals("wall")) {
+                        this.maze[i][j].setBrickType("floor");
                         drawCuadro(gc, pixelSize, i, j);
                     } else {
-                        this.maze[i][j].setType("wall");
+                        this.maze[i][j].setBrickType("wall");
                         drawCuadro(gc, pixelSize, i, j);
                     }
 
@@ -716,8 +719,8 @@ public class MazeOfThreads extends Application implements Runnable {
     public void printType(int x, int y) {
         for (int f = 0; f < maze.length; f++) {
             for (int c = 0; c < maze[0].length; c++) {
-                if (maze[f][c].pressMouse(x, y)) {
-                    System.out.println(maze[f][c].getType());
+                if (maze[f][c].getMouseValue(x, y)) {
+                    System.out.println(maze[f][c].getBrickType());
                 }
             }
         }
@@ -727,15 +730,15 @@ public class MazeOfThreads extends Application implements Runnable {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
                 if (matriz[i][j] == 0) {
-                    maze[i][j] = new Block(i, j, pixelSize, "wall");
+                    maze[i][j] = new Brick(i, j, pixelSize, "wall");
                 } else if (matriz[i][j] == 2) {
 
-                    maze[i][j] = new Block(i, j, pixelSize, "fruta");
+                    maze[i][j] = new Brick(i, j, pixelSize, "fruta");
                 } else if (matriz[i][j] == 3) {
 
-                    maze[i][j] = new Block(i, j, pixelSize, "start");
+                    maze[i][j] = new Brick(i, j, pixelSize, "start");
                 } else {
-                    maze[i][j] = new Block(i, j, pixelSize, "floor");
+                    maze[i][j] = new Brick(i, j, pixelSize, "floor");
                 }
             }
         }
@@ -744,11 +747,11 @@ public class MazeOfThreads extends Application implements Runnable {
 
     public void drawCuadro(GraphicsContext gc, int pixelSize, int x, int y) throws FileNotFoundException {
         Image imagenFruta = new Image(new FileInputStream("src/Assets/stop.png"));
-        if (maze[x][y].getType().equals("wall")) {
+        if (maze[x][y].getBrickType().equals("wall")) {
             gc.setFill(Color.BLACK);
             gc.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
 
-        } else if (maze[x][y].getType().equals("fruta")) {
+        } else if (maze[x][y].getBrickType().equals("fruta")) {
             gc.drawImage(imagenFruta, x * pixelSize, y * pixelSize, 20, 20);
         } else {
             gc.clearRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
@@ -760,14 +763,14 @@ public class MazeOfThreads extends Application implements Runnable {
 
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                if (maze[i][j].getType().equals("wall")) {
+                if (maze[i][j].getBrickType().equals("wall")) {
                     gc.setFill(Color.BLACK);
                     gc.fillRect(i * pixelSize, j * pixelSize, pixelSize, pixelSize);
 
-                } else if (maze[i][j].getType().equals("fruta")) {
+                } else if (maze[i][j].getBrickType().equals("fruta")) {
                     gc.setFill(Color.DARKORANGE);
                     gc.fillRect(i * pixelSize, j * pixelSize, pixelSize, pixelSize);
-                } else if (maze[i][j].getType().equals("start")) {
+                } else if (maze[i][j].getBrickType().equals("start")) {
                     gc.setFill(Color.DARKORANGE);
                     gc.fillRect(i * pixelSize, j * pixelSize, pixelSize, pixelSize);
                 } else {
@@ -782,28 +785,28 @@ public class MazeOfThreads extends Application implements Runnable {
     }
 
     /*comopara los bloques de al rededor de donde esta el personaje y guarda en el array si es un camino*/
-    private ArrayList<Block> ArrayCamino(int x, int y) {
-        ArrayList<Block> next = new ArrayList<>();
+    private ArrayList<Brick> ArrayCamino(int x, int y) {
+        ArrayList<Brick> next = new ArrayList<>();
         /*maze.length para no comparar una posicion que no exista y la otra comparacion para guardar en el arrays todo los bloques de tipo
          floor */
-        if (x + 1 < maze.length && maze[x + 1][y].getType().equals("floor") || x + 1 < maze.length && maze[x + 1][y].getType().equals("fruta")
-                || x + 1 < maze.length && maze[x + 1][y].getType().equals("start")) {
+        if (x + 1 < maze.length && maze[x + 1][y].getBrickType().equals("floor") || x + 1 < maze.length && maze[x + 1][y].getBrickType().equals("fruta")
+                || x + 1 < maze.length && maze[x + 1][y].getBrickType().equals("start")) {
 
             next.add(maze[x + 1][y]);
 
         }
-        if (x - 1 >= 0 && maze[x - 1][y].getType().equals("floor") || x - 1 >= 0 && maze[x - 1][y].getType().equals("fruta")
-                || x - 1 >= 0 && maze[x - 1][y].getType().equals("start")) {
+        if (x - 1 >= 0 && maze[x - 1][y].getBrickType().equals("floor") || x - 1 >= 0 && maze[x - 1][y].getBrickType().equals("fruta")
+                || x - 1 >= 0 && maze[x - 1][y].getBrickType().equals("start")) {
 
             next.add(maze[x - 1][y]);
         }
-        if (y + 1 < maze[0].length && maze[x][y + 1].getType().equals("floor") || y + 1 < maze[0].length && maze[x][y + 1].getType().equals("fruta")
-                || y + 1 < maze[0].length && maze[x][y + 1].getType().equals("start")) {
+        if (y + 1 < maze[0].length && maze[x][y + 1].getBrickType().equals("floor") || y + 1 < maze[0].length && maze[x][y + 1].getBrickType().equals("fruta")
+                || y + 1 < maze[0].length && maze[x][y + 1].getBrickType().equals("start")) {
 
             next.add(maze[x][y + 1]);
         }
-        if (y - 1 >= 0 && maze[x][y - 1].getType().equals("floor") || y - 1 >= 0 && maze[x][y - 1].getType().equals("fruta")
-                || y - 1 >= 0 && maze[x][y - 1].getType().equals("start")) {
+        if (y - 1 >= 0 && maze[x][y - 1].getBrickType().equals("floor") || y - 1 >= 0 && maze[x][y - 1].getBrickType().equals("fruta")
+                || y - 1 >= 0 && maze[x][y - 1].getBrickType().equals("start")) {
 
             next.add(maze[x][y - 1]);
         }
@@ -812,10 +815,10 @@ public class MazeOfThreads extends Application implements Runnable {
     }
 
     private void searchNewRoads() {
-        ArrayList<Block> next = new ArrayList<>();
+        ArrayList<Brick> next = new ArrayList<>();
         for (int x = 0; x < maze.length; x++) {
             for (int y = 0; y < maze[0].length; y++) {
-                maze[x][y].setNext(ArrayCamino(x, y));
+                maze[x][y].setBrickArray(ArrayCamino(x, y));
 
             }
         }
