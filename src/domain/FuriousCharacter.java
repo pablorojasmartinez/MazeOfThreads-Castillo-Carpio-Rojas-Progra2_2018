@@ -34,7 +34,7 @@ public class FuriousCharacter extends Thread {
     private boolean crash2 = true;
     private Brick currentBrick;
     private Brick nextBrick;
-    String playerName;
+    private String playerName;
     private Item sharedLocation;
 
     public FuriousCharacter(int size, Brick brick) throws FileNotFoundException {
@@ -53,6 +53,7 @@ public class FuriousCharacter extends Thread {
         
     }
 
+   //busca la direccion para moverse si e encuentra encerrado
     public boolean noWayOut() {
         int movementDirection;
         switch (auxMovement) {
@@ -152,6 +153,8 @@ public class FuriousCharacter extends Thread {
         }
     };
 
+    //en este hilo se definen las direcciones mediante un random entre 4 para las 4 direcciones disponibles que pueda 
+    //escojer y de igual manera depende de la direccion que este coja se pintara la imagen del personaje correspondiente
     public void run() {
         new Thread(runnable).start();
         while (flag2) {

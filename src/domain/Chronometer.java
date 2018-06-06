@@ -6,10 +6,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javafx.stage.Stage;
 
+/**
+ *
+ * @author hansel
+ */
 public class Chronometer extends JFrame implements Runnable{
     JLabel time;
     Thread threadTime;
-    boolean ActiveChrono;
+    private boolean activeChrono;
     Stage thestage;
     
     private String timeObtained;
@@ -50,7 +54,7 @@ public class Chronometer extends JFrame implements Runnable{
         {
             //Mientras cronometroActivo sea verdadero entonces seguira
             //aumentando el tiempo
-            while( ActiveChrono )
+            while( activeChrono )
             {
                 Thread.sleep( 4 );
                 //Incrementamos 4 milesimas de segundo
@@ -97,14 +101,14 @@ public class Chronometer extends JFrame implements Runnable{
     //Iniciar el cronometro poniendo cronometroActivo 
     //en verdadero para que entre en el while
     public void initChrono() {
-        ActiveChrono = true;
+        activeChrono = true;
         threadTime = new Thread( this );
         threadTime.start();
     }
 
     //Esto es para parar el cronometro
     public void stopChrono(){
-        ActiveChrono = false;
+        activeChrono = false;
     }
     
     public String getTime(){

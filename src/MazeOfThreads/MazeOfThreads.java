@@ -220,6 +220,28 @@ public class MazeOfThreads extends Application implements Runnable {
         textArea = new TextArea();
         textArea.relocate(1053, 500);
         textArea.setEditable(false);
+        
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+//        ObservableList<Chronometer> data = FXCollections.observableArrayList(
+//                new Chronometer(chrono.getTime(), chrono.getTime()));
+//        area = new TextArea();
+//        area.relocate(1200, 500);
+
+//        table.setEditable(true);
+//        table.setMaxSize(160, 160);
+//        table.relocate(1200, 500);
+//        TableColumn playerName = new TableColumn("Player");
+// 
+//        playerName.setCellValueFactory(new PropertyValueFactory<Chronometer, String>("player"));
+//        playerName.setPrefWidth(80);
+//        TableColumn timeUp = new TableColumn("time up");
+//        timeUp.setCellValueFactory(new PropertyValueFactory<Chronometer, String>("time up"));
+//        timeUp.setPrefWidth(80);
+////        table.setItems(data);
+//        table.getColumns().addAll(playerName, timeUp);
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
 
         run.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -291,7 +313,7 @@ public class MazeOfThreads extends Application implements Runnable {
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(MazeOfThreads.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+//                chronometer.setVisible(true);
                 chronometer.setLocation(1200, 10);
                 chronometer.initChrono();
 
@@ -434,6 +456,7 @@ public class MazeOfThreads extends Application implements Runnable {
                 elapsed = System.nanoTime() - start;
                 wait = time - elapsed / 1000000;
                 if (flag) {
+                    //va dibujando los personajes
                     draw(gc2, pixel);
                 }
 
@@ -448,6 +471,7 @@ public class MazeOfThreads extends Application implements Runnable {
 
     }
 
+    //dibuja las imagenes de acuerdo al tipo de vector de personaje 
     public void draw(GraphicsContext gc, int pixelSize) throws InterruptedException, FileNotFoundException {
 
         gc.clearRect(0, 0, width2, height2);
@@ -559,6 +583,7 @@ public class MazeOfThreads extends Application implements Runnable {
         }
     }
 
+    //si el personaje furious pasa por el bloque donde hay una fruta se elimina la fruta y queda en piso vacio
     public void checkForItem(FuriousCharacter furious) throws FileNotFoundException {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < this.maze[0].length; j++) {
@@ -574,7 +599,7 @@ public class MazeOfThreads extends Application implements Runnable {
             }
         }
     }
-
+    //inicializa el jugador (bichito) en posicion ya implementada [0][0]
     public Brick getBrickMaze() {
         if (matrixType == "easy") {
             return this.maze[0][0];
@@ -593,6 +618,7 @@ public class MazeOfThreads extends Application implements Runnable {
         return this.maze[0][0];
     }
 
+    //cambia el tipo de bloque en [i][j] en pared, piso vacio o item
     public void convertMaze2(int x, int y, GraphicsContext gc) throws FileNotFoundException {
 
         int x1;
@@ -616,6 +642,7 @@ public class MazeOfThreads extends Application implements Runnable {
         lookForFloor();
     }
 
+    //cambia el tipo de bloque en [i][j] en pared o piso vacio 
     public void convertMaze1(int x, int y, GraphicsContext gc) throws FileNotFoundException {
         int x1;
         int y2;
@@ -641,7 +668,8 @@ public class MazeOfThreads extends Application implements Runnable {
     public int getPixelSize() {
         return this.pixel;
     }
-
+    
+    //crea la matriz de bloques (con respecto a la matriz quemada) y los va definiendo segun su tipo (String)
     public void createMaze(int pixel, int[][] matrix) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
@@ -661,6 +689,7 @@ public class MazeOfThreads extends Application implements Runnable {
         lookForFloor();
     }
 
+    //se encarga de pitar el item o el bloque donde se quiera colocar nueva pared
     public void drawItem(GraphicsContext gc, int pixelSize, int x, int y) throws FileNotFoundException {
         Image itemImage = new Image(new FileInputStream("src/Assets/stop.png"));
         if (maze[x][y].getBrickType().equals("wall")) {
@@ -675,6 +704,8 @@ public class MazeOfThreads extends Application implements Runnable {
 
     }
 
+    //dibuja y/o pinta el laberinto de manera que dond vayan bloques 
+    //los pinte de negro y donde este otra cosa lo pinte de anaranjado
     public void drawMaze(GraphicsContext gc, int pixel) {
 
         for (int i = 0; i < maze.length; i++) {
@@ -700,6 +731,9 @@ public class MazeOfThreads extends Application implements Runnable {
 
     }
 
+    /*compara los bloques de al rededor de donde esta el personaje y guarda en el array si es un espacio vacio*/
+    // se recorre el maze para no comparar una posicion que no exista y la otra comparacion para guardar en el arrays todo los bloques de tipo
+       //  floor
     private ArrayList<Brick> floorArray(int x, int y) {
         ArrayList<Brick> nextFloor = new ArrayList<>();
         if (x + 1 < maze.length && maze[x + 1][y].getBrickType().equals("floor") || x + 1 < maze.length && maze[x + 1][y].getBrickType().equals("fruta")
@@ -727,6 +761,7 @@ public class MazeOfThreads extends Application implements Runnable {
         return nextFloor;
     }
 
+    //busca nuevos caminos vacios en el maze en la pos [x][y] de la matriz dependiendo del length de la matriz
     private void lookForFloor() {
         ArrayList<Brick> nextFloor = new ArrayList<>();
         for (int x = 0; x < maze.length; x++) {
