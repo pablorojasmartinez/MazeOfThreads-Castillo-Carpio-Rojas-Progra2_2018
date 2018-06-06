@@ -149,10 +149,11 @@ public class MazeOfThreads extends Application implements Runnable {
         canvas2 = new Canvas(WIDTHM, HEIGHTM);
         Button run = new Button("RUN");
         //  run.setMinSize(100, 30);
-        run.relocate(480, 670);
+     //   run.relocate(480, 670);
+        run.relocate(580,670 );
 
         Button reStar = new Button("PAUSE");
-        reStar.relocate(580, 670);
+        reStar.relocate(480, 670);
 
         Button easy = new Button("EASY");
         //easy.setMinSize(100, 30);
@@ -171,8 +172,9 @@ public class MazeOfThreads extends Application implements Runnable {
 
         Label labelAmount = new Label("Quantity");
         // labelAmount.setMinSize(100, 45);
-        labelAmount.relocate(1250, 40);
+        labelAmount.relocate(1250, 45);
         //  labelAmount.setVisible(true);
+
 
         TextField texfieldAmount = new TextField();
         //  texfieldAmount.setMinSize(100, 30);
@@ -182,8 +184,8 @@ public class MazeOfThreads extends Application implements Runnable {
         // accept.setMinSize(100, 30);
         accept.relocate(1150, 200);
 
-        Label nombre = new Label("name player");
-        labelAmount.relocate(1250, 130);
+       Label nombre = new Label("name player");
+        nombre.relocate(1250, 140);
         TextField txteto = new TextField();
         txteto.relocate(1250, 160);
 
@@ -451,6 +453,7 @@ public class MazeOfThreads extends Application implements Runnable {
         pane.getChildren().add(texfieldAmount);
         pane.getChildren().add(cbx);
         pane.getChildren().add(accept);
+        pane.getChildren().add(nombre);
         pane.getChildren().add(pause);
         pane.setBackground(Background.EMPTY);
         pane.getChildren().add(area);
@@ -740,7 +743,7 @@ public class MazeOfThreads extends Application implements Runnable {
     }
 
     public void drawCuadro(GraphicsContext gc, int pixelSize, int x, int y) throws FileNotFoundException {
-        Image imagenFruta = new Image(new FileInputStream("src/Assets/alto.jpg"));
+        Image imagenFruta = new Image(new FileInputStream("src/Assets/stop.png"));
         if (maze[x][y].getType().equals("wall")) {
             gc.setFill(Color.BLACK);
             gc.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
